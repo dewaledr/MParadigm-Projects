@@ -12,28 +12,16 @@ struct ProductStock {
 	int quantity;
 };
 
-struct CustomerList {
-	struct Product product;
-	int quantity;
-};
-
 struct Shop {
 	double cash;
-	struct ProductStock stock[200];
+	struct ProductStock stock[20];
 	int index;
 };
-
-// struct Customer {
-// 	char* name;
-// 	double budget;
-// 	struct ProductStock shoppingList[10];
-// 	int index;
-// };
 
 struct Customer {
 	char* name;
 	double budget;
-	struct CustomerList shoppingList[10];
+	struct ProductStock shoppingList[10];
 	int index;
 };
 
@@ -83,48 +71,10 @@ struct Shop createAndStockShop()
 		//struct Product product = { &n, price };...this does'nt work
 		struct ProductStock stockItem = { product, quantity };
 		shop.stock[shop.index++] = stockItem;
-		printf("================\n");
-		printf("NAME OF PRODUCT - %s | PRICE:%.2f | QUANTITY:%d\n", name, price, quantity);
+		// printf("NAME OF PRODUCT %s PRICE %.2f QUANTITY %d\n", name, price, quantity);
     }
 	
 	return shop;
-}
-
-// Read Customer List of Items from CSV
-struct Customer makeCustomer()
-{
-	struct Customer customer = { "dominic" };
-    FILE * f2p;
-    char * line = NULL;
-    size_t len = 0;
-    ssize_t read;
-
-    f2p = fopen("items.csv", "r");
-    if (f2p == NULL)
-        exit(EXIT_FAILURE);
-
-    while ((read = getline(&line, &len, f2p)) != -1) {
-        //printf("Retrieved line of length %zu:\n", read);
-        //printf("%s IS A LINE", line);
-		char *nm = strtok(line, ",");
-		char *pr = strtok(NULL, ",");
-		char *qt = strtok(NULL, ",");
-		
-		int quantity = atoi(qt);
-		double price = atof(pr);
-		
-		char *name = malloc(sizeof(char) * 50);	//new memory location to store n as name
-		strcpy(name, nm);
-		struct Product product = { name, price };
-		
-		struct CustomerList listItem = { product, quantity };
-		customer.shoppingList[customer.index++] = listItem;
-		printf("...................\n");
-		printf("NAME OF Customer List: %s - %s | PRICE:%.2f | QUANTITY:%d\n", 
-		customer.name, name, price, quantity);
-    }
-	
-	return customer;
 }
 
 void printShop(struct Shop s)
@@ -145,64 +95,100 @@ void printShop(struct Shop s)
 void compareOrderWithStock(struct Customer c, struct Shop s ){
 // Loop through the customers shopping list. Process all items with QTY != 0, for now, just provide appropriate message.
 // First, locate the item and its index number in the Shop
-	for (int i = 0; i < s.index; i++){
-		if (c.shoppingList[i].quantity != 0){
-			if (c.shoppingList[i].quantity > s.stock[i].quantity){
-
-				printf("======>> ...FEEDBACK: \n");
-				printf("Customer Ordered - %d units of %s\n", c.shoppingList[i].quantity, c.shoppingList[i].product.name);
-				printf("There are %d units of %s in stock!\n", s.stock[i].quantity, c.shoppingList[i].product.name);
-				printf("Shortfall: %d\n", s.stock[i].quantity - c.shoppingList[i].quantity);
-				printf("SORRY, we do not have enough of  (%s) in stock...\n", c.shoppingList[i].product.name);
-			}else{
-				printf("======>> ...FEEDBACK: \n");
-				printf("Customer Ordered - %d units of %s\n", c.shoppingList[i].quantity, c.shoppingList[i].product.name);
-				printf("There are %d units of %s in stock!\n", s.stock[i].quantity, c.shoppingList[i].product.name);
-				printf("We can fulfil your order on (%s)...\n", c.shoppingList[i].product.name);
-
-// 				Update stock items appropriately...
-				s.stock[i].quantity -= c.shoppingList[i].quantity;
-			}
-// 			Print remaining stock...
-// 			printCustomer(c);
-			printf("\n\nITEMS remaining is stock... %s is %d\n", c.shoppingList[i].product.name, s.stock[i].quantity );
-// 			printShop(s);
+	int i; 
+	int j;
+	for (j = 0; j < s.index; j++){
+		for (i = 0; i < c.index; i++){
+			if (c.shoppingList[i].product.name == s.stock[j].product.name){
+				if (c.shoppingList[i].quantity != 0){
+					printf("======>> ...FEEDBACK: \n");
+					printf("Customer Ordered - %d units of %s\n", c.shoppingList[i].quantity, c.shoppingList[i].product.name);
+					printf("There are %d units of %s in stock!\n", s.stock[j].quantity, c.shoppingList[i].product.name);
+					printf("We can fulfil your order on (%s)...\n", c.shoppingList[i].product.name);
+// 					Update stock items appropriately...
+					s.stock[j].quantity -= c.shoppingList[i].quantity;
+					printf("\n\nITEMS remaining is stock... %s is %d\n", c.shoppingList[i].product.name, s.stock[j].quantity );
+				}
+				else {
+					//Print remaining stock...
+ 					printCustomer(c);
+ 					//printf("\n\nITEMS remaining is stock... %s is %d\n", c.shoppingList[i].product.name, s.stock[j].quantity );
+ 					printShop(s);
+				}
+			} // whileiloop
 		}
 	}
-	// printf("\n\n....ITEMS remaining is stock...\n");
-// 	printShop(s);
-}
+
+	printf("\n\nITEMS remaining is stock... %s is %d\n", c.shoppingList[i].product.name, s.stock[j].quantity );
+}// compareWithStock Loop
+
+
+
+// Compare order with stock. If Qty ordered is > than stock available, report this otherwise
+// 	go ahead and fulfil it. Extend this to multiple orders later
+// */
+// void compareOrderWithStock(struct Customer c, struct Shop s ){
+// // Loop through the customers shopping list. Process all items with QTY != 0, for now, just provide appropriate message.
+// // First, locate the item and its index number in the Shop
+// 	int i, j;
+// 	for (j = 0; j < s.index; j++){
+// 		for (i = 0; i < c.index; i++){
+// 			do while ((c.shoppingList[i].product.name == s.stock[j].product.name) && (c.shoppingList[i].quantity != 0)){
+// 				// if (c.shoppingList[i].quantity > s.stock[j].quantity){
+// // 
+// // 					printf("======>> ...FEEDBACK: \n");
+// // 					printf("Customer Ordered - %d units of %s\n", c.shoppingList[i].quantity, c.shoppingList[i].product.name);
+// // 					printf("There are %d units of %s in stock!\n", s.stock[j].quantity, c.shoppingList[i].product.name);
+// // 					printf("Shortfall: %d\n", s.stock[j].quantity - c.shoppingList[i].quantity);
+// // 					printf("SORRY, we do not have enough of  (%s) in stock...\n", c.shoppingList[i].product.name);
+// // 				}else{
+// 					printf("======>> ...FEEDBACK: \n");
+// 					printf("Customer Ordered - %d units of %s\n", c.shoppingList[i].quantity, c.shoppingList[i].product.name);
+// 					printf("There are %d units of %s in stock!\n", s.stock[j].quantity, c.shoppingList[i].product.name);
+// 					printf("We can fulfil your order on (%s)...\n", c.shoppingList[i].product.name);
+// 
+// // 				Update stock items appropriately...
+// 					s.stock[j].quantity -= c.shoppingList[i].quantity;
+// // 				}
+// // 			Print remaining stock...
+// // 			printCustomer(c);
+// // 			printf("\n\nITEMS remaining is stock... %s is %d\n", c.shoppingList[i].product.name, s.stock[j].quantity );
+// // 			printShop(s);
+// 			}
+// 		} // iloop
+// 	// printf("\n\n....ITEMS remaining is stocks...\n");
+// // 	printShop(s);
+// 
+// 	} ///j loop
+// 	printf("\n\nITEMS remaining is stock... %s is %d\n", c.shoppingList[i].product.name, s.stock[j].quantity );
+// }// compareWithStock Loop
 
 int main(void) 
 {
-// 	Create a Customer and his items to buy
-// 	struct Customer dominic = { "Dominic", 500.0 };
-// 	
-// 	WHY can't I just read this from the stock file?
-//  	struct Product coke = { "Can Coke", 1.10 };
-//  	struct Product bread = { "Bread", 0.7 };
-//  	struct Product tomato = { "Tomato Sauce", 0.8 };
-//  	struct Product binbag = { "Bin Bag", 2.50  };
+	// Create a Customer and his items to buy
+	struct Customer dominic = { "Dominic", 500.0 };
+	
+	// WHY can't I just read this from the stock file?
+ 	struct Product coke = { "Can Coke", 1.10 };
+ 	struct Product bread = { "Bread", 0.7 };
+ 	struct Product tomato = { "Tomato Sauce", 0.8 };
+ 	struct Product binbag = { "Bin Bag", 2.50  };
 // 	printProduct(coke);
-// 
+
 // 	Customers Shopping List
-//  	struct ProductStock cokeStock = { coke, 120 };
-//  	struct ProductStock breadStock = { bread, 2 };
-//  	struct ProductStock tomatoStock = { tomato, 50 };
-//  	struct ProductStock binbagStock = { binbag, 5 };
-// 
+ 	struct ProductStock cokeStock = { coke, 120 };
+ 	struct ProductStock breadStock = { bread, 2 };
+ 	struct ProductStock tomatoStock = { tomato, 50 };
+ 	struct ProductStock binbagStock = { binbag, 5 };
+
 // 	Customers Items stored inside Shopping Cart
-//  	dominic.shoppingList[dominic.index++] = cokeStock;
-//  	dominic.shoppingList[dominic.index++] = breadStock;
-//  	dominic.shoppingList[dominic.index++] = tomatoStock;
-//  	dominic.shoppingList[dominic.index++] = binbagStock;
+ 	dominic.shoppingList[dominic.index++] = cokeStock;
+ 	dominic.shoppingList[dominic.index++] = breadStock;
+ 	dominic.shoppingList[dominic.index++] = tomatoStock;
+ 	dominic.shoppingList[dominic.index++] = binbagStock;
 	
 	struct Shop shop = createAndStockShop();
-	printf("....Customer List....\n");
-	printf("....Customer List....\n");
-	printf("....Customer List....\n");
-	struct Customer customer = makeCustomer();
-// 	compareOrderWithStock(dominic, shop);		//FA 7-October
+	compareOrderWithStock(dominic, shop);		//FA 7-October
 	
 // 	Update the stock remaining in Shop if order was filled
 	
