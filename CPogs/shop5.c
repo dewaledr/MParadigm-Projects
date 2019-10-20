@@ -156,7 +156,7 @@ double findProductPrice(struct Shop s, char* n){
 			return pd.price;	
 		}
 	}
-		printf(">>>SORRY<<<, this shop does not have any such item: '%s' \n", n);
+		printf(">>>SORRY<<<...no such item in the shop: '%s' \n", n);
 		return 0;
 }
 
@@ -289,22 +289,34 @@ int main(void)
 			}
 		}
    }
-   printf("*********************************************************\n");
+   printf("\n");
    printf("Final bill for available items on this transaction is €%.2f\n", runningTotal);
    printf("*********************************************************\n");
    if (runningTotal > customer.budget){
 	   printf("Transaction aborted... Customer %s has no enough fund...\n", customer.name);
+	   printf("\n");
+	   //shop.cash += runningTotal;
+	   printf("Cash in Shop is now: €%.2f\n", shop.cash);
+	   printf("*********************************************************\n");
+	   printf("\n");
    }
    else {
-	   printf("Success... Updating shop inventory and cash status now...");
+	   printf("Success... Now Updating shop inventory and cash level...\n");
 	   
-	   /*
-	   NEED TO COMPLETE...
+//	   NEED TO COMPLETE...
 	   //Update shop items
+	   //printf("Quantity of %s in shop %3d\n", customer.shoppingList[cindx].product.name, shop.stock[sindx].quantity);
+	   //shop.stock[sindx].quantity -= customer.shoppingList[cindx].quantity;
+	   //printf("New quantity of %s in shop %3d\n", customer.shoppingList[cindx].product.name, shop.stock[sindx].quantity);
 	   //Update shop cash status
-	   //Print shop...
-	   THEN, do the operate in live mode version...
-	   */
+	   printf("\n");
+	   shop.cash += runningTotal;
+	   printf("Cash in Shop is now: €%.2f\n", shop.cash);
+	   printf("*********************************************************\n");
+//	   
+//	   //Print shop...
+//	   THEN, do the operate in live mode version...
+//	   */
    }
 		// printCustomer(customer);
 		// printShop(shop);
