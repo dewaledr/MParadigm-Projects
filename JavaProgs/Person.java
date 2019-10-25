@@ -45,7 +45,8 @@ public class Person{
 //	public static void main(String[] args){
 //		Person p1 = new Person("Francis", 21);
 //		Person p2 = new Person("Catherine", 23);
-//		//p1.age = -1;
+//		//p1.age = -1;	//will work because main is in the same class. When moved out to student, it wont work
+//		we must use the setter method to do it...  Example of data hiding in Java
 //		p1.setAge(-1);
 //		System.out.println(p1);
 //		System.out.println(p2);

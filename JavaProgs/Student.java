@@ -19,6 +19,7 @@ public class Student extends Person{
 	public static void main(String[] args){
 		String[] classes = new String[]{"Python programming", "Programming Design","IT Project Management"};
 		Student s = new Student("Wang MangMang",34,classes);
+		//s.age = 19;
 		s.setAge(100);
 		System.out.println(s);
 	}

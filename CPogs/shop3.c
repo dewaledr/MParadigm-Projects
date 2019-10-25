@@ -58,7 +58,7 @@ struct Shop createAndStockShop()
     size_t len = 0;
     ssize_t read;
 
-    fp = fopen("stock5.csv", "r");
+    fp = fopen("stock3.csv", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
 	printf("*************************\n");
@@ -99,7 +99,7 @@ struct Customer makeCustomer()
     size_t len = 0;
     ssize_t read;
 
-    f2p = fopen("items5.csv", "r");
+    f2p = fopen("items3.csv", "r");
     if (f2p == NULL)
         exit(EXIT_FAILURE);
 
@@ -141,6 +141,63 @@ struct Customer makeCustomer()
 	printf("%s has €%.2f available to spend...\n", cname, budget);
 	printf("*******************************\n");
 	return customer;
+}
+
+// Read freeCustomer Item from keyboard
+struct Customer freeCustomer(){
+	// Create the customer with budget
+	struct Customer freeCustomer = {}; 
+	// Get subsequent lines from the Shop items
+    //while ((read = getline(&line, &len, f2p)) != -1) {
+	float bgt;
+	char *nm;
+	//char name = 50;
+	int qt;
+	printf("Please enter customer budget... ");
+	scanf("%f", &bgt);	
+	
+	printf("Please enter item Quantity here... ");
+	scanf("%d", &qt);
+	
+	//char name[256];
+	// For example if you use \n at the place of x then it will read a string until it encounters \n in the string, if present.
+	
+	
+	printf("Please enter item name here... ");
+	//scanf("%[^\n]s", &name);
+	scanf("%s",nm);
+	//scanf("%[^\n]s", nm);
+	//scanf("%[^\n]%*c",nm);
+	//fgets(nm, 100, stdin);
+	//fgets is better and safet option than scanf for reading arbitrary lenth string....	
+	
+		
+	
+	// int quantity  = atoi(qt);
+// 	double budget = atof(bgt);
+	char *name = malloc(sizeof(char) * 50);	//new memory location to store n as name
+	strcpy(name, nm);
+	
+	printf("*******************************\n");
+	printf("Customer has €%.2f available to spend on %d of %s...\n", bgt, qt, name);
+	//printf("ListItem -> %3d | Customer %s wants %3d units of %s \n", 
+	// customer.index, cname, quantity, name);
+	// struct Customer {
+	// 	char* name;
+	// 	double budget;
+	// 	struct CustomerList shoppingList[10]; //Maximum items on customers list = 10
+	// 	int index;
+	// };
+	
+	freeCustomer.name = "Anonymous";
+	freeCustomer.budget = bgt;
+	freeCustomer.shoppingList[0].quantity = qt;
+	freeCustomer.shoppingList[0].product.name = name;
+	freeCustomer.index = 1;
+	
+	// printf("Anonymous customer\n");
+	printf("*******************************\n");
+	return freeCustomer;
 }
 
 
@@ -245,13 +302,7 @@ int compareOrderWithStock(int cQty, int shopQty, double itemPrice, double custom
 		return 0;
 	}
 
-int main(void) 
-{
-	int resp = 0;	
-	printf("Please enter -1 to End Program, 1 for BATCH Processing or 0 for Single Item Procesing: ");
-	scanf("%d", &resp);
-	while (resp != -1){
-		
+
 // 	Create a Customer and his items to buy
 // 	struct Customer dominic = { "Dominic", 500.0 };
 // 	
@@ -273,7 +324,157 @@ int main(void)
 //  	dominic.shoppingList[dominic.index++] = breadStock;
 //  	dominic.shoppingList[dominic.index++] = tomatoStock;
 //  	dominic.shoppingList[dominic.index++] = binbagStock;
+	
+	void singleProcess(){
+		printf("Single Item Processing mode...\n");
 
+		// printf( "................................................................................\n");
+	// 	printf( "................................................................................\n");
+	// 	printf( ".............Create & Stock Shop and Create & make Customer List................\n");
+	// 	printf( "................................................................................\n");
+	// 	printf( "................................................................................\n");	
+	
+		struct Shop shop = createAndStockShop();
+	
+	
+		// printf( "................................................................................\n");
+	// 	printf( "................................................................................\n");
+	// 	printf( "......................Create Customer and his list..............................\n");
+	// 	printf( "................................................................................\n");
+	// 	printf( "................................................................................\n");
+	
+		struct Customer customer = freeCustomer();
+	 
+		// printf( "................................................................................\n");
+		// printf( ".........................keep Shop items in an array............................\n");
+		// printf( "................................................................................\n");
+		char* shopItems[200000] = {};	//array pointers storing all shop items
+		int i;
+		for(i = 0; i < 200; i++)		//iterate the number of pointer times in the array
+		{
+			shopItems[i] = shop.stock[i].product.name;
+		
+		}
+	
+		int sindx;
+		for( sindx = 0; sindx < (sizeof( shopItems ) / sizeof( shopItems[0] )); sindx++){
+			if (shopItems[sindx] != NULL){
+		       	// printf( "%s\n", shopItems[sindx] );
+			}
+		}
+	
+		// printf( "................................................................................\n");
+		// printf( "...................keep Customer List Items in an array.........................\n");
+		// printf( "................................................................................\n");
+		char* custItems[100] = {};//array pointers storing all customer list items
+		int j;
+		for(j = 0; j < 10; j++)// iterate the number of pointer times in the array
+		{
+			custItems[j] = customer.shoppingList[j].product.name;
+		}
+
+		int cindx = 0;
+		double runningTotal = 0.0;
+		double itemPrice = 0.0;
+		int findIndex = 0;
+		
+		customer.index = 1;
+		// freeCustomer.name = "Anonymous";
+// 		freeCustomer.budget = bgt;
+// 		freeCustomer.shoppingList[0].product.name = name;
+// 		freecustomer.shoppingList[0].quantity = qty;
+// 		freeCustomer.index = 1;
+	
+		// printf( "................................................................................\n");
+		// printf( "................................................................................\n");
+		// printf( ".........................PROCESS Customer ORDER.................................\n");
+		// printf( "................................................................................\n");
+		// printf( "................................................................................\n");
+	
+		//for( cindx = 0; cindx < (sizeof( custItems ) / sizeof( custItems[0] )); cindx++){
+		//	if (custItems[cindx] != NULL){
+		    // printf( "%s\n", custItems[cindx] );
+				itemPrice = findProductPrice(shop, customer.shoppingList[0].product.name);
+				//printf("This item %s costs %.2f\n", custItems[cindx], itemPrice);
+				if (itemPrice != 0.0){
+					printf("Item - %s costs %.2f\n", customer.shoppingList[0].product.name, itemPrice);
+					int qtyInShop = findProductQty(shop, customer.shoppingList[0].product.name);
+					findIndex = findItemIndex(shop, customer.shoppingList[0].product.name); 
+					
+					/*	Compare order with stock. If Qty ordered is > than stock available, report this otherwise
+						go ahead and fulfil it. Extend this to multiple orders later
+					*/
+					int buyStatus = compareOrderWithStock(customer.shoppingList[0].quantity, qtyInShop, 
+							itemPrice, customer.budget, customer.shoppingList[0].product.name, findIndex, shop);
+					if (buyStatus == -1){
+						printf("...This item cannot be purchased at this time\n");
+						printf("\n----------------------------------\n");
+						// printf("notOK ARRAY %s\n", badItems[i]);
+					}
+					else if (buyStatus == -2){
+						printf("...Customer Does not have enough money to buy this item/item quantity\n");
+						printf("...Please reduce quantity and try again....\n");
+						printf("\n----------------------------------\n");
+					}
+					///
+		
+					///
+					else{
+						printf("...This item may be purchased if there's adequate credit to cover the order TOTAL.\n");
+						printf("\n----------------------------------\n");
+						runningTotal += itemPrice * customer.shoppingList[cindx].quantity;
+						// Update Shop with quantity sold
+						shop.stock[findIndex].quantity -= customer.shoppingList[cindx].quantity;
+						///
+						}
+				}
+				//}
+	   //}
+   
+	   printf("\n");
+	   //printf("*********************************************************\n");
+	   printf("********  ");
+	   printf("Final bill for available items on this transaction is €%.2f", runningTotal);
+	   printf("  ********\n");
+	   printf("\n");
+   
+	   // If customer does not have enough money to complete the transaction, ROLLBACK
+	   if (runningTotal > customer.budget){
+		   printf("Transaction aborted... Customer %s has no enough fund...\n", customer.name);
+		   printf("\n");
+		   //Rollback... Qty update
+	  
+		   printf("Cash in Shop is now: €%.2f\n", shop.cash);
+		   printf("\n");
+		   printf("\n");
+	   }
+	   else {
+		   printf("Success... Now Updating cash status in the shop...\n");
+		   // R
+	   
+		   printf("*********************************************************\n");
+
+	//	   NEED TO COMPLETE...
+		   //Update shop items
+		   //printf("Quantity of %s in shop %3d\n", customer.shoppingList[cindx].product.name, shop.stock[sindx].quantity);
+		   //shop.stock[sindx].quantity -= customer.shoppingList[cindx].quantity;
+		   //printf("New quantity of %s in shop %3d\n", customer.shoppingList[cindx].product.name, shop.stock[sindx].quantity);
+		   //Update shop cash status
+		   printf("\n");
+		   shop.cash += runningTotal;
+		   printf("Cash in Shop is now: €%.2f\n", shop.cash);
+		   //shop.product[].quantity = //struct Shop shop2 = new;
+		   printf("*********************************************************\n");
+
+	   }
+	// 	printCustomer(dominic);
+		printShop(shop);
+		printf("\n!!!!!!!!!!!    END of PROCESSING        !!!!!!!!!!!!!!!!!!\n\n");
+	}
+		///=====================
+	//}	//End of singleItem()
+	
+	void batchProcess(){
 	printf( "................................................................................\n");
 	printf( "................................................................................\n");
 	printf( ".............Create & Stock Shop and Create & make Customer List................\n");
@@ -406,11 +607,51 @@ int main(void)
 	   printf("*********************************************************\n");
 
    }
-	printf("\n!!!!!!!!!!!    END of PROCESSING        !!!!!!!!!!!!!!!!!!\n\n");
-		
 // 	printCustomer(dominic);
 	printShop(shop);
-}
-    return 0;
+	printf("\n!!!!!!!!!!!    END of PROCESSING        !!!!!!!!!!!!!!!!!!\n\n");
 }
 
+int main(void) 
+{
+	int resp = 0;
+	printf("***************************************************************************************\n");
+	printf("***************************************************************************************\n");
+	printf("*** PLEASE MAKE A CHOICE:                                                           ***\n");	
+	printf("*** Enter -1 to End Program,                                                        ***\n");
+	printf("*** Enter  1 for Multiple Purchase from .CSV file                                   ***\n");            
+	printf("*** Enter  2 for Single Item Purchase                                               ***\n"); 
+	printf("***                                                                                 ***\n");
+	printf("***************************************************************************************\n");
+	printf("***************************************************************************************\n");
+	printf("Choice: ");
+	scanf("%d", &resp);
+	while (resp != -1){
+
+		if (resp == 1){
+			batchProcess();
+			//break;
+		}else if (resp == 2){
+			singleProcess();
+			//break;
+		}else{
+			printf("!!!!\n");
+			printf("!!!! Error... Irregular input detected\n");
+			printf("!!!!\n");
+			// return -1;
+			break;
+		}
+		printf("***************************************************************************************\n");
+		printf("***************************************************************************************\n");
+		printf("*** PLEASE MAKE A CHOICE:                                                           ***\n");	
+		printf("*** Enter -1 to End Program,                                                        ***\n");
+		printf("*** Enter  1 for Multiple Purchase from .CSV file                                   ***\n");            
+		printf("*** Enter  2 for Single Item Purchase                                               ***\n"); 
+		printf("***                                                                                 ***\n");
+		printf("***************************************************************************************\n");
+		printf("***************************************************************************************\n");
+		printf("Choice: ");
+		scanf("%d", &resp);
+	}
+	return 0;
+}
