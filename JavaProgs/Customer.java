@@ -66,10 +66,10 @@ public class Customer {
 		return ret + "]";
 	}
 	
-	public static void main(String[] args) {
-		Customer james = new Customer("src/items3.csv");
-		System.out.println(james);
-	}
+//	public static void main(String[] args) {
+//		Customer james = new Customer("src/items3.csv");
+//		System.out.println(james);
+//	}
 	
 	
 

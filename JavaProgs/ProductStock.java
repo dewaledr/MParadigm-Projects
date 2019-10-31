@@ -18,11 +18,15 @@ public class ProductStock {
 		return quantity;
 	}
 
+//	@Override
+//	public String toString() {
+//		return "ProductStock [product=" + product + ", quantity=" + quantity + "]";
+//	}
+//	
 	@Override
 	public String toString() {
-		return "ProductStock [product=" + product + ", quantity=" + quantity + "]";
+		return  product + " , " + quantity;
 	}
-	
 	
 
 }
