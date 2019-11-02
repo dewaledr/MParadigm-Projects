@@ -17,6 +17,10 @@ public class ProductStock {
 	public int getQuantity() {
 		return quantity;
 	}
+	
+	public void setQuantity(int minusQtyBought) {
+		quantity -= minusQtyBought;
+	}
 
 //	@Override
 //	public String toString() {

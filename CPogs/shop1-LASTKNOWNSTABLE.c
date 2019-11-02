@@ -150,7 +150,7 @@ struct Customer makeCustomer()
 	printf("***************************************************************************************\n");
 	printf("%s has €%.2f available to spend...\n", cname, budget);
 	printf("\n");
-	printf("***** ORDER Item STATUS Report *****\n");
+	printf("***** ORDER Item STATUS Report ***** ***************** ********************* **********\n");
 	return customer;
 }
 
@@ -191,7 +191,7 @@ struct Customer freeCustomer(){
 	freeCustomer.index = 1;
 	
 	printf("\n");
-	printf("***** ORDER Item STATUS Report *****\n");
+	printf("***** ORDER Item STATUS Report ***** ***************** ********************* **********\n");
 	return freeCustomer;
 }
 
@@ -207,7 +207,7 @@ double findProductPrice(struct Shop s, char* n){
 		}
 	}
 	printf("---------------------------------------------------------------------------------------\n");
-	printf(">>> '%s' - NOT AVAILABLE in the shop: \n", n);
+	printf(">>> '%s' <<< ...SORRY...no such item in the shop: \n", n);
 	printf("---------------------------------------------------------------------------------------\n");
 	return 0;
 }
@@ -244,7 +244,7 @@ int findItemIndex(struct Shop s, char* n){
 
 // Compare order items with available items in the Shop... 
 // Be careful of spelling and Capitalization here...		
-int compareOrderWithStock(int cQty, int shopQty, double itemPrice, double customerFund, double initialBGT, char *itemToBuy, int indxx, struct Shop s){
+int compareOrderWithStock(int cQty, int shopQty, double itemPrice, double customerFund, char *itemToBuy, int indxx, struct Shop s){
 	// Loop through the customers shopping list. Process all items with QTY != 0.
 	double totalItemCost = cQty * itemPrice;
 	//printf("...Cost of %d units of %s is %.2f\n", cQty, itemToBuy,totalItemCost);
@@ -252,8 +252,7 @@ int compareOrderWithStock(int cQty, int shopQty, double itemPrice, double custom
 		// printf("...Item in short supply\n");
 		return -1;
 	}
-	else if ((totalItemCost > customerFund) || (totalItemCost > initialBGT)){
-		printf("INITIAL BUDGET is: %.2f\n", initialBGT);
+	else if (totalItemCost > customerFund){
 		return -2;
 	}
 	shopQty -= cQty;
@@ -272,9 +271,7 @@ void singleProcess(){
 	// 	"......................Create Customer and his list.................
 	// 	"...................................................................
 	struct Customer customer = freeCustomer();
-	
-	// Store customer budget here before modification
-	double initialBudget = customer.budget;
+	 
 	// .....................................................................
 	// .........................keep Shop items in an array.................
 	// .....................................................................
@@ -320,25 +317,23 @@ void singleProcess(){
 			go ahead and fulfil it.
 		*/
 		int buyStatus = compareOrderWithStock(customer.shoppingList[0].quantity, qtyInShop, 
-		itemPrice, customer.budget, initialBudget, customer.shoppingList[0].product.name, findIndex, shop);
+		itemPrice, customer.budget, customer.shoppingList[0].product.name, findIndex, shop);
 							
 		double itemCost = customer.shoppingList[0].quantity * itemPrice;
 					
 		if (buyStatus == -1){
-			printf("CanNOT Buy\n");
-			printf("Customer Ordered %d (%s)\n",customer.shoppingList[0].quantity,customer.shoppingList[0].product.name); 
-			printf("SORRY... (%s) Not enough quantity in stock\n", customer.shoppingList[0].product.name);
+			printf("CanNOT Buy...Customer Ordered %d (%s)",customer.shoppingList[0].quantity,customer.shoppingList[0].product.name); 
+			printf("...Item in short supply\n");
 			printf("---------------------------------------------------------------------------------------\n");
 		}
 		else if (buyStatus == -2){
-			printf("CanNOT Buy\n");
-			printf("Customer ordered %d units of (%s), subTotal is (€%.2f)\n",customer.shoppingList[cindx].quantity, 
+			printf("CanNOT Buy...Customer ordered %d units of (%s), subTotal is (€%.2f)",customer.shoppingList[cindx].quantity, 
 			customer.shoppingList[0].product.name, itemCost);
-			printf("Sorry...Customer does not have enough money to buy this item.\n");
-			printf("Customer has €%.2f remaining.\n", customer.budget);
+			printf("...Customer does not have enough money.\n");
+		
 		}
 		else{
-			printf("Can Buy\n");
+			printf("Buy:....\n");
 			printf("Customer ordered %d (%s), subTotal (€%.2f)\n",customer.shoppingList[cindx].quantity, 
 			customer.shoppingList[0].product.name, itemCost);
 			//printf("---------------------------------------------------------------------------------------\n");
@@ -352,27 +347,31 @@ void singleProcess(){
 	}		
 	printf("\n");
 	// printf("Final bill for available items on this transaction is €%.2f", runningTotal);
-	printf("**********    Final bill to customer on item is: €%.2f    *********\n", runningTotal);
-	printf("\n");
-	
+	printf("**********    Final bill for available items on this transaction is €%.2f    *********\n", runningTotal);
+	printf("                                                                            \n");
+	// If customer does not have enough money to complete the transaction, ROLLBACK
+	if (runningTotal > initialCustomerBudget){
+		printf("Transaction aborted... Customer %s has no enough money...\n", customer.name);
+		printf("\n");
+	  
+		printf("Cash in Shop is now: €%.2f\n", shop.cash);
+		printf("\n");
+		printf("\n");
+	}
+	else {
+		printf("Now Updating cash status in the shop...\n");
+		printf("                                                                            \n");
+	    printf("***************************************************************************************\n");
+		   //Update shop cash status
+		printf("\n");
+		shop.cash += runningTotal;
+		printf("Cash in Shop is now: €%.2f\n", shop.cash);
+		printf("                                                                            \n");
+	   	printf("***************************************************************************************\n");
+	}
 	//print final list of items in the Shop
 	printShop(shop);		
 	printf("\n!!!!!!!!!!!    END of PROCESSING        !!!!!!!!!!!!!!!!!!\n\n");
-	
-	printf("...Now Updating cash status in the shop... Please wait...\n");
-	printf("                                                                            \n");
-	printf("***************************************************************************************\n");
-		   //Update shop cash status
-	printf("\n");
-	shop.cash += runningTotal;
-		
-	printf("Customer has \t€%.2f remaining.\n\n", customer.budget);
-	printf("Cash in Shop is now: \t€%.2f\n", shop.cash);
-	printf("                                                                            \n");
-	printf("***************************************************************************************\n");
-	// }
-	
-	
 }	//}	//End of singleItem() processing
 	
 void batchProcess(){
@@ -389,9 +388,6 @@ void batchProcess(){
 	printf("----------------------------Customer List Items----------------------------------------\n");
 	printf("***************************************************************************************\n");
 	struct Customer customer = makeCustomer();
-	
-	// Store customer budget here before modification
-	double initialBudget = customer.budget;
 
 	// printf( ".........................keep Shop items in an array............................\n");
 	// printf( "................................................................................\n");
@@ -445,28 +441,23 @@ void batchProcess(){
 					go ahead and fulfil it. Extend this to multiple orders later
 				*/
 				int buyStatus = compareOrderWithStock(customer.shoppingList[cindx].quantity, qtyInShop, 
-										itemPrice, customer.budget, initialBudget, custItems[cindx], findIndex, shop);
+										itemPrice, customer.budget, custItems[cindx], findIndex, shop);
 				double itemCost = customer.shoppingList[cindx].quantity * itemPrice;
 				
 				if (buyStatus == -1){
-					printf("CanNOT Buy\n");
-					printf("Customer Ordered - %d (%s)\n", customer.shoppingList[cindx].quantity, custItems[cindx]);
-					printf("SORRY...(%s) Not enough quantity in stock\n", custItems[cindx]);
+					printf("CanNOT Buy...Customer Ordered - %d (%s)", customer.shoppingList[cindx].quantity, custItems[cindx]);
+					printf("...Item in short supply\n");
 					printf("---------------------------------------------------------------------------------------\n");
 					
 				}
 				else if (buyStatus == -2){
-					printf("CanNOT Buy\n");
-					printf("Customer ordered %d (%s), subTotal: (€%.2f)\n",customer.shoppingList[cindx].quantity, 
-					custItems[cindx], itemCost);
-					printf("SORRY...Customer does not have enough money to buy this item.\n");
-					printf("Customer has €%.2f remaining.\n", customer.budget);
+					printf("CanNOT Buy:....Customer ordered %d (%s), subTotal: (€%.2f)",customer.shoppingList[cindx].quantity, custItems[cindx], itemCost);
+					printf("...Customer does not have enough money.\n");
 
 				}
 				else{
-					printf("Can Buy\n");
-					printf("Customer ordered %d (%s), subTotal: (€%.2f)\n",customer.shoppingList[cindx].quantity, 
-					custItems[cindx], itemCost);
+					printf("Buy:....");
+					printf("Customer ordered %d (%s), subTotal: (€%.2f)\n",customer.shoppingList[cindx].quantity, custItems[cindx], itemCost);
 					// printf("This item may be purchased.\n");
 					runningTotal += itemPrice * customer.shoppingList[cindx].quantity;
 					// Update Shop with quantity sold
@@ -483,21 +474,29 @@ void batchProcess(){
    printf("*********    Total bill for available items on this transaction: €%.2f    *********\n", runningTotal);
    printf("\n");
    
+   // If customer does not have enough money to complete the transaction, ROLLBACK
+   if (runningTotal > initialCustomerBudget){
+	   printf("Transaction aborted... Customer %s has no enough money...\n", customer.name);
+	   printf("\n");
+	  
+	   printf("Cash in Shop is now: €%.2f\n", shop.cash);
+	   printf("\n");
+	   printf("\n");
+   }
+   else {
+	   printf("***************************************************************************************\n");
+	   printf("\nNow Updating cash status in the shop...\n");
+
+	   //Update shop items
+	   printf("\n");
+	   shop.cash += runningTotal;
+	   printf("Cash in Shop is now: €%.2f\n", shop.cash);
+	   printf("***************************************************************************************\n");
+
+   }
     //print final list of items in the Shop
 	printShop(shop);
 	printf("\n!!!!!!!!!!!    END of PROCESSING        !!!!!!!!!!!!!!!!!!\n\n");
-	
-	printf("...Now Updating cash status in the shop... Please wait...\n");
-	printf("                                                                            \n");
-	printf("***************************************************************************************\n");
-	//Update shop cash status
-	printf("\n");
-	shop.cash += runningTotal;
-		
-	printf("Customer has \t€%.2f remaining.\n\n", customer.budget);
-	printf("Cash in Shop is now: \t€%.2f\n", shop.cash);
-	printf("                                                                            \n");
-	printf("***************************************************************************************\n");
 }	// End of Batch Processing from CSV file
 
 int main(void) 

@@ -51,6 +51,9 @@ public class Customer {
 		return budget;
 	}
 
+	public void setBudget(double moneyIn) {
+		budget = moneyIn;
+	}
 
 	public ArrayList<ProductStock> getShoppingList() {
 		return shoppingList;
@@ -59,11 +62,15 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		String ret = "Customer: name = " + name + ", budget=" + budget + "\nshoppingList = [\n";
+		// return All Customer detail plus index of items in her shopping list
+		String ret = "Customer: name = " + name + ", Budget = €" + budget + 
+					"\nshoppingList:\n" + "==============\n";
 		for (ProductStock productStock : shoppingList) {
-			ret+= productStock.getProduct().getName() + " - " + "Quantity: " + productStock.getQuantity() + "\n";
+			ret+= "Item " + (shoppingList.indexOf(productStock) + 1) + "    " +
+					productStock.getProduct().getName() + "\tQty: " + 
+					productStock.getQuantity() + "\n";
 		}
-		return ret + "]";
+		return ret;
 	}
 	
 //	public static void main(String[] args) {
