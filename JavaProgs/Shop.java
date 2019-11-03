@@ -282,19 +282,22 @@ public class Shop {
 		
 		Scanner sinC = new Scanner(System.in);
 		try {
-			System.out.println("Enter customer Budget: ");
+			// Declare how much money customer is willing to spend
+			System.out.println("How much money do you have to spend? ");
 			cusBudget = Double.parseDouble(sinC.nextLine());
-			System.out.println("Enter Item Name please: ");
+			// Provide item name of interest
+			System.out.println("What Product do you want to buy? ");
 			itemName = sinC.nextLine();
-			System.out.println("Enter item Quantity: ");
+			// Quantity of item desired
+			System.out.println("How many "+ itemName + " do you want? ");
 			itemQty = Integer.parseInt(sinC.nextLine());
-			//sin.close();
 		}
 		catch (NoSuchElementException e) {
 			e.printStackTrace();
 			sinC.close();
 		}
-		
+		// Re-echo customer inputs
+		System.out.println("OK, you want to buy " + itemQty + " " + itemName + " and you have €" + formatter.format(cusBudget) + ".\n");
 		
 		Shop 			shop = new Shop("src/GmitShop/stockItems.csv");
 		Customer 	customer = new Customer(cusBudget, itemName, itemQty);
@@ -468,7 +471,7 @@ public class Shop {
 //				e2.printStackTrace();
 //			}
 		}
-		System.out.println("!!! You entered " + str + " - END of Program...");
+		System.out.println("!!! You entered " + str + " - Shop program will now END...");
 		sin.close();
 		// return 0;
 	} /// End of main

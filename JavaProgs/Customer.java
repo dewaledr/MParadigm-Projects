@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +15,8 @@ public class Customer {
 	private String name;
 	private double budget;
 	private ArrayList<ProductStock> shoppingList;
+	
+	static NumberFormat formatter = new DecimalFormat("#,##0.00");
 	
 	public Customer(String fileName) {
 		shoppingList = new ArrayList<>();
@@ -42,6 +46,18 @@ public class Customer {
 		}
 	}
 	
+	/// 3-arg Constructor for singlePRocess()....FA
+	public Customer(double bgt, String nm, int qty) {
+		shoppingList = new ArrayList<>();
+		name = nm;
+		budget = bgt;
+		int quantity = qty;
+		Product p = new Product(name, 0);
+		ProductStock s = new ProductStock(p, quantity);
+		shoppingList.add(s);			
+	}
+			
+	
 	public String getName() {
 		return name;
 	}
@@ -63,7 +79,7 @@ public class Customer {
 	@Override
 	public String toString() {
 		// return All Customer detail plus index of items in her shopping list
-		String ret = "Customer: name = " + name + ", Budget = €" + budget + 
+		String ret = "Customer: name = " + name + ", Budget = €" + formatter.format(budget) + 
 					"\nshoppingList:\n" + "==============\n";
 		for (ProductStock productStock : shoppingList) {
 			ret+= "Item " + (shoppingList.indexOf(productStock) + 1) + "    " +
