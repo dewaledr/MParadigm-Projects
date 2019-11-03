@@ -515,7 +515,7 @@ int main(void)
 	printf("***                                                                                 ***\n");
 	printf("***************************************************************************************\n");
 	printf("***************************************************************************************\n");
-	printf("Choice: ");
+	printf("Enter your Choice: ");
 	scanf("%s", &resp);
 	while (resp != '0' ){
 		if (resp == '1' ){
@@ -526,7 +526,7 @@ int main(void)
 		}
 		else{
 			printf("!!!!\n");
-			printf("!!!! Error... Irregular input detected. Please try again...\n");
+			printf("!!!! Error... Irregular input [%c] detected. Please try again...\n",resp);
 			printf("!!!!\n");
 			//break;
 		}
@@ -539,8 +539,10 @@ int main(void)
 		printf("***                                                                                 ***\n");
 		printf("***************************************************************************************\n");
 		printf("***************************************************************************************\n");
-		printf("Choice: ");
+		printf("Enter your Choice: ");
 		scanf("%s", &resp);
 	}
+	// When 0 in entered, End the program
+	printf("!!! You entered %c - Shop program will now END...\n\n",resp);
 	return 0;
 }
