@@ -202,7 +202,7 @@ public class Shop {
 					double custMoney = checkCustomerBudget(customer);
 					System.out.println("Cost to customer: €" + formatter.format(itemCost));
 					if ((customer.getBudget() < itemCost) || (customerMoneyYTD < itemCost)) {
-						System.out.println("Sorry...Customer does not have enough money to buy this item.");
+						System.out.println("SORRY...Customer does not have enough money to buy this item.");
 						System.out.println("CUSTOMER has... €" + formatter.format(custMoney) + " Remaining.");
 					} else {
 						custMoney -= itemCost;
@@ -273,7 +273,8 @@ public class Shop {
 			sinC.close();
 		}
 		// Re-echo customer inputs
-		System.out.println("OK, you want to buy " + itemQty + " " + itemName + " and you have €" + formatter.format(cusBudget) + ".\n");
+		System.out.println("Customer has €" + formatter.format(cusBudget) +" available to spend on " + 
+		 itemQty + " units of " + itemName + "...\n");
 		
 		// Create and Stock Shop and Customer objects
 		Shop 			shop = new Shop("src/GmitShop/stockItems.csv");
@@ -325,7 +326,7 @@ public class Shop {
 					double custMoney = checkCustomerBudget(customer);
 					System.out.println("Cost to customer: €" + formatter.format(itemCost));
 					if ((customer.getBudget() < itemCost) || (customerMoneyYTD < itemCost)) {
-						System.out.println("Sorry...Customer does not have enough money to buy this item.");
+						System.out.println("SORRY...Customer does not have enough money to buy this item.");
 						System.out.println("CUSTOMER has... €" + formatter.format(custMoney) + " Remaining.");
 					} else {
 						
