@@ -173,9 +173,6 @@ struct Customer freeCustomer(){
 	char *nm;
 	int qt;
 	
-	printf("How much money do you have to spend? ");
-	scanf("%f", &bgt);	
-	
 	// printf("Please enter item Quantity here... ");
 	// 	scanf("%d", &qt);
 	printf("What Product do you want to buy? ");
@@ -183,15 +180,15 @@ struct Customer freeCustomer(){
 	scanf("%c", &temp); 
 	//Read strings inasmuch as \n is not encountered --- So as to be able to take in names with spaces in between	
 	scanf("%[^\n]s", nm); 
-
-//	printf("How many of %s do you want?",name);
-// 	scanf("%d", &qt);
 	
 	char *name = malloc(sizeof(char) * 50);	//new memory location to store n as name
 	strcpy(name, nm);
 	
 	printf("How many of %s do you want?",name);
 	scanf("%d", &qt);
+	
+	printf("How much money do you have to spend? ");
+	scanf("%f", &bgt);	
 	
 	printf("***************************************************************************************\n");
 	printf("\nCustomer has €%.2f available to spend on %d units of %s...\n", bgt, qt, name);

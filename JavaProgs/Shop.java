@@ -251,22 +251,29 @@ public class Shop {
 		//	String itemName = "imac computer";
 		//	int itemQty = 2;
 		
+		// Create and Stock Shop object
+		Shop 			shop = new Shop("src/GmitShop/stockItems.csv");
+		
 		// Take customer inputs from sysin
 		double cusBudget = 0.00;
 		String itemName = "";
 		int itemQty = 0;
 		
 		Scanner sinC = new Scanner(System.in);
+		System.out.println("***************************************************************************************");
+		System.out.println("Initial Cash in Shop: " + formatter.format(shop.getCash()));
+		System.out.println("***************************************************************************************");
+
 		try {
-			// Declare how much money customer is willing to spend
-			System.out.println("How much money do you have to spend? ");
-			cusBudget = Double.parseDouble(sinC.nextLine());
 			// Provide item name of interest
-			System.out.println("What Product do you want to buy? ");
+			System.out.println("\nWhat Product do you want to buy? ");
 			itemName = sinC.nextLine();
 			// Quantity of item desired
 			System.out.println("How many "+ itemName + " do you want? ");
 			itemQty = Integer.parseInt(sinC.nextLine());
+			// Declare how much money customer is willing to spend
+			System.out.println("How much money do you have to spend? ");
+			cusBudget = Double.parseDouble(sinC.nextLine());
 		}
 		catch (NoSuchElementException e) {
 			e.printStackTrace();
@@ -276,11 +283,9 @@ public class Shop {
 		System.out.println("Customer has €" + formatter.format(cusBudget) +" available to spend on " + 
 		 itemQty + " units of " + itemName + "...\n");
 		
-		// Create and Stock Shop and Customer objects
-		Shop 			shop = new Shop("src/GmitShop/stockItems.csv");
+		// Create Customer objects
 		Customer 	customer = new Customer(cusBudget, itemName, itemQty);
 		
-
 		System.out.println("Printing Shop Items");
 		System.out.println(shop);
 		System.out.println("-------------------- End Shop List -----------------------\n");
