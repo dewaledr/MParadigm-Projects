@@ -1,16 +1,16 @@
 
-# Author Francis Adepoju, G00364694. December 10, 2019
+# Author Francis Adepoju, G00364694. December 1 - 10, 2019
 # Strictly PYTHON  3.7.4
 # ACKNOWLEDGEMENT:
-    # Most of the ideas used in this work were taken from stack overflow 
+    # Most of the ideas used in this work were adapted from https://stackoverflow.com/questions
 
 def pow(num, power):
     """
     The function raises the provided number to the power supplied. 
     This is peformed by the use of recursion. This method has no side effects.
     """
-    # this is the base case for recursion as 
-    # any number to the power of 1 is itself i.e. 2^1 = 2
+    # This is the base case for recursion as 
+    # Any number to the power of 1 is itself i.e. 2^1 = 2
     if (power == 1):
         return num
     elif power == 0:
@@ -218,111 +218,43 @@ def minimum(lst):
         else:
             return m2
 
-# # Test the function
-# arrayItems1 = [66,0,91,3,55,8,18,81,-200,111,-789]
-# arrayItems2 = [66,10,91,23,55,18,18,81,1200,111,9.99]
-# arrayItems3 = [66,0,91,3,55,8,18,81,200,111,13,67,22]
-# arrayItems4 = [66,0,91,-3,55,8,18,81,250,111]
-# arrayItems5 = [5]
-# arrayItems0 = []
+def closeParenthesis(s, i=0, cnt=0):
+    '''
+    Q10 ...Verify the parentheses Given a string, return true if it is a nesting of zero or more
+    pairs of parenthesis, like \(())" or \((()))"
+    The LOGIC: when you find an open parenthesis, call the function. 
+    when the function finds a close parenthesis, return. If the function finds the end of string, there's an open 
+    and no close parenthesis. If the top function returns and a close parenthesis is found later in the string, 
+    there's an unmatched close parenthesis. This method has no side effects.
+    
+    INPUT:  An arbitrary string of open and close parenthesis with nothing inside them.
+    OUTPUT: Print TRUE if patenthesis is fully closed or FALSE otherwise. 
+    '''
+    # This is the base case. The recurssion will end if there in no element left in the input string.
+    if i == len(s): 
+        return cnt == 0
+    
+    if cnt < 0: 
+        return False
 
-# print("Minimum item in list-0 is: ", minimum(arrayItems0))
-# print("Minimum item in list-1 is: ", minimum(arrayItems1))
-# print("Minimum item in list-2 is: ", minimum(arrayItems2))
-# print("Minimum item in list-3 is: ", minimum(arrayItems3))
-# print("Minimum item in list-4 is: ", minimum(arrayItems4))
-# print("Minimum item in list-5 is: ", minimum(arrayItems5))
+    if s[i] == "(": 
+        return  closeParenthesis(s, i + 1, cnt + 1)
+    elif s[i] == ")": 
+        return  closeParenthesis(s, i + 1, cnt - 1)
+    return closeParenthesis(s, i + 1, cnt)
 
-# ...........................................................
-# Q10 ...Verify the parentheses Given a string, return true if it is a nesting of zero or more
-#       pairs of parenthesis, like \(())" or \((()))".
-# Approach
-#---just loop over the characters counting when you see ( and ) and increment a decrement a counter.
-# def length(s): 
-# if not s:  # test if there are no more characters in the string
-#    return 0
-# else:   # maintain a count by adding 1 each time you return
-#         # get all but the first character using a slice
-
-# def length(s): 
-#     if not s:  # test if there are no more characters in the string
-#         return 0
-
-#     if (s[0:1] == "("):
-#         # print("Found", s[0:1])
-#         cnt = 1 + length( s[1:])
-#         return cnt%2 == 0
-#     else:
-#         # print("Found", s[0:1])
-#         cnt = 1 - length( s[1:] )
-#         return cnt%2 != 0
-
-
-# #from string import *
-
-# # def find(s, *args):
-#     return s.find(*args)
-
-# def countSubStringMatchRecursive(target, key):
-#     index = find(target, key)
-#     # index2 = find(target, key1, key2)
-#     if index > -1:
-#         return countSubStringMatchRecursive(target[index + 1:], key) + 1
-#     return 0
-
-
-# def test(target, key):
-#     instances = countSubStringMatchRecursive(target, key)
-#     if instances == 0:
-#         print("No instance of %r in %r"%(key, target))
-#     else:
-#         print ("Number of instances of %r in %r: %d" % (key, target, instances))
-
-# print(test("((()))())","("))
-## Q.10.................
-# def find(s, *args):
-# # """
-# # The function raises the provided number to the power supplied. 
-# # This is peformed by the use of recursion. This method has
-# # no side effects.
-# # """
-#     return s.find(*args)
-
-# def countSubStringMatchRecursive(target, key1, key2):
-#     index1 = find(target, key1)
-#     index2 = find(target, key2)
-#     if index1 > -1:
-#         return countSubStringMatchRecursive(target[index1 + 1:], key1) + 1
-#     return 0
-#     if index2 > -1:
-#         return countSubStringMatchRecursive(target[index2 + 1:], key2) + 1
-#     return 0
-
-# def test(target, key1, key2):
-#     instances = countSubStringMatchRecursive(target, key1, key2)
-#     if instances == 0:
-#         print("No instance of %r in %r"%(key1, target))
-#     else:
-#         print ("Number of instances of %r in %r: %d" % (key1, target, instances))
-
-# print(test("((()))())","(",")"))
-
-
-# Test the function
-# print(length(""))
-# print(length("((())))))(())"))
-# print(length("(((((())))))"))
+# END of functions
 
 if __name__ == "__main__":
     # Run the functions one after the other as detailed below...
-    print("========================= Q0.==============================")
+    print("===================================== Q0.==========================================")
     # Test the Power function
     print("Running the power function")
     print("3^4 = ", pow(3,4))
     print("6^6 = ", pow(6,6))
     print("0^4 = ", pow(0,4))
     print("6^0 = ", pow(6,0))
-    print("========================= Q1.==============================")
+    print("===================================== Q1.==========================================")
     
     # Test the sunUp() function
     print("Summing up array elements")    
@@ -332,7 +264,7 @@ if __name__ == "__main__":
     print("[10, 20, 45, 9, 5,10,900] = ", sumUp(num1))
     print("                    [9,9] = ", sumUp(num2))
     print("                     [99] = ", sumUp(num3))
-    print("========================= Q2.==============================")
+    print("===================================== Q2.==========================================")
 
     # Test the muxUp() function
     num11  = [10, 2, 9, 5, 0.5]
@@ -342,7 +274,7 @@ if __name__ == "__main__":
     print("[10, 2, 9, 5, 0.5] = ", muxUp(num11))
     print("               [9] = ", muxUp(num12))
     print("       [0,30,1000] = ", muxUp(num13))
-    print("========================= Q3.==============================")
+    print("===================================== Q3.==========================================")
 
     # Test the removeODD() function
     num111 = [10, 12, 9, 2, 24, 25, 11, 3, 33, 98, 100, 111, 120]
@@ -351,7 +283,7 @@ if __name__ == "__main__":
     print("Return All the Even numbers in this array - [10, 12, 9, 2, 24, 25, 11, 3, 33, 98, 100, 111, 120]\n", removeODD(num111))
     print("Return All the Even numbers in this array - [9]\n", removeODD(num112))
     print("Return All the Even numbers in this array - [0,11,8,13]\n", removeODD(num113))
-    print("========================= Q4.==============================")
+    print("===================================== Q4.==========================================")
    
     # Test the removeEVEN() function
     num121 = [10, 12, 9, 2, 24, 25, 11, 3, 33, 98, 100, 111, 120]
@@ -360,7 +292,7 @@ if __name__ == "__main__":
     print("Return All the Odd numbers in this array - [10, 12, 9, 2, 24, 25, 11, 3, 33, 98, 100, 111, 120]\n", removeEven(num121))
     print("Return All the Odd numbers in this array - [9]\n", removeEven(num122))
     print("Return All the Odd numbers in this array - [0,11,8,13]\n", removeEven(num123))
-    print("========================= Q5.==============================")
+    print("===================================== Q5.==========================================")
     
     # Test the changeCharacter() function
     st = 'Miss. Lissanalta Stepph'
@@ -369,7 +301,7 @@ if __name__ == "__main__":
     print("     a in 'Miss. Lissanalta Stepph'==>", changeCharacter(st, 'a'))
     print("     l in 'Miss. Lissanalta Stepph'==>", changeCharacter(st, 'l'))
     print(" blank in 'Miss. Lissanalta Stepph'==>", changeCharacter(st, ' '))
-    print("========================= Q6.==============================")
+    print("===================================== Q6.==========================================")
     
     # Test the recursiveIndex() function
     numA = [10, 12, 9, 2, 24, 25, 11, 3,'Q', 33, 98, 100, 111, 120]
@@ -382,7 +314,7 @@ if __name__ == "__main__":
     print("Index of  98 in array      ==> ", recursiveIndex(numA, 98))
     print("Index of 599 in array      ==> ", recursiveIndex(numA, 599))
     print("Index of  33 in array      ==> ", recursiveIndex(numA, 33))
-    print("========================= Q7.==============================")
+    print("===================================== Q7.==========================================")
     
     # Test the sumDigits() function
     print("Summing the digits in     7 ==>", sumDigits(7)) 
@@ -392,7 +324,7 @@ if __name__ == "__main__":
     print("Summing the digits in    43 ==>",sumDigits(43))
     print("Summing the digits in    15 ==>",sumDigits(15))
     print("Summing the digits in 25991 ==>",sumDigits(25991))
-    print("========================= Q8.==============================")
+    print("===================================== Q8.==========================================")
     
     # Test the printArrRecursively() function
     arrayItems1 = [66, 0, 91, 3, 55, 8, 18, 81, 200, 111]
@@ -405,7 +337,7 @@ if __name__ == "__main__":
     print("arrayItems3: ", arrayItems3)
     printArrRecursively(arrayItems3)
 
-    print("========================= Q9.==============================")
+    print("===================================== Q9.==========================================")
     # Test the minimum() function
     arrayItems1 = [66,0,91,3,55,8,18,81,-200,111,-789]
     arrayItems2 = [66,10,91,23,55,18,18,81,1200,111,9.99]
@@ -421,5 +353,25 @@ if __name__ == "__main__":
     print("        Minimum item in [66,0,91,-3,55,8,18,81,250,111] is: ", minimum(arrayItems4))
     print("                                    Minimum item in [5] is: ", minimum(arrayItems5))
 
-    print("========================= Q10.=============================")
-    # Test the removeODD() function
+    print("===================================== Q 10.==========================================")
+    # Test the closeParenthesis() function
+    # Showing off the rep() string (!r) capability to display a quoted string as well...
+    s1 = "((()))())"
+    s2 = ")()("
+    s3 = "()()"
+    s4 = "(())"
+    s5 = "(()"
+    s6 = ")"
+    s7 = "("
+    s8 = "((((()))))"
+    s9 = "((((()(((("
+    print("{!r} ==> {}".format(s1, closeParenthesis(s1)))
+    print("{!r} ==> {}".format(s2, closeParenthesis(s2)))
+    print("{!r} ==> {}".format(s3, closeParenthesis(s3)))
+    print("{!r} ==> {}".format(s4, closeParenthesis(s4)))
+    print("{!r} ==> {}".format(s5, closeParenthesis(s5)))
+    print("{!r} ==> {}".format(s6, closeParenthesis(s6)))
+    print("{!r} ==> {}".format(s7, closeParenthesis(s7)))
+    print("{!r} ==> {}".format(s8, closeParenthesis(s8)))
+    print("{!r} ==> {}".format(s9, closeParenthesis(s9)))
+    print("===================================== END ===========================================")
